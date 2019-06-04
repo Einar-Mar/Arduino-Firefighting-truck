@@ -17,7 +17,7 @@ int Right_S = A5;
 #define in1 12 
 #define in2 11  
 
-int rotDirection = 0; //seting the rotation direction value to 0
+int rotDirection = 0; //setting the rotation direction value to 0
 
 //Pin numbers definition for the motors 
 const int motorEnableLeft = 10;
@@ -33,7 +33,7 @@ const int echoPinLeft = 3;
 const int trigPinRight = A3;
 const int echoPinRight = 4;
 
-//Sart variables for the Motors
+//Sart variables for the motors
 const int leftMotorSpeed = 255; //best at 160
 const int rightMotorSpeed = 255;//best at 255
 const int delayTime = 150;
@@ -45,11 +45,12 @@ long durationLeft;
 int distanceLeft;
 long durationRight;
 int distanceRight;
-const int minFrontDistance = 30;
-const int minSideDistance = 20;
+
+const int minFrontDistance = 30; // how close the car will drive if something is straight forward
+const int minSideDistance = 20; //how close the car will drive if something is on the sides
 const int stuckDistance = 10; //what distance the code defines as stuck 
 
-/*-------preset actions------*/
+/*-------preset actions to the driver------*/
 
 //-preset for stoping the car
 void stopCar () {

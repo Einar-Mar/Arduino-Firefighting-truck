@@ -17,7 +17,7 @@ int Right_S = A5;
 #define in1 12 
 #define in2 11  
 
-int rotDirection = 0; //setting the rotation direction value to 0
+int rotDirection = 0; //seting the rotation direction value to 0
 
 //Pin numbers definition for the motors 
 const int motorEnableLeft = 10;
@@ -33,9 +33,9 @@ const int echoPinLeft = 3;
 const int trigPinRight = A3;
 const int echoPinRight = 4;
 
-//Sart variables for the motors
+//Sart variables for the Motors
 const int leftMotorSpeed = 255; //best at 160
-const int rightMotorSpeed = 255;//best at 255
+const int rightMotorSpeed = 200;//best at 255
 const int delayTime = 150;
 
 //Variables for Ultrasonic Sensors
@@ -45,12 +45,11 @@ long durationLeft;
 int distanceLeft;
 long durationRight;
 int distanceRight;
-
-const int minFrontDistance = 30; // how close the car will drive if something is straight forward
-const int minSideDistance = 20; //how close the car will drive if something is on the sides
+const int minFrontDistance = 30;
+const int minSideDistance = 20;
 const int stuckDistance = 10; //what distance the code defines as stuck 
 
-/*-------preset actions to the driver------*/
+/*-------preset actions------*/
 
 //-preset for stoping the car
 void stopCar () {
@@ -77,6 +76,22 @@ void goLeft () {
   digitalWrite(motorForwardRight, HIGH);
   digitalWrite(motorBackRight, LOW);
   analogWrite(motorEnableLeft, 0);
+  analogWrite(motorEnableRight, rightMotorSpeed);
+}
+void turnLeft () {
+  digitalWrite(motorForwardLeft, LOW);
+  digitalWrite(motorBackLeft, HIGH);
+  digitalWrite(motorForwardRight, HIGH);
+  digitalWrite(motorBackRight, LOW);
+  analogWrite(motorEnableLeft, rightMotorSpeed);
+  analogWrite(motorEnableRight, rightMotorSpeed);
+}
+void turnRight () {
+  digitalWrite(motorForwardLeft, HIGH);
+  digitalWrite(motorBackLeft, LOW);
+  digitalWrite(motorForwardRight, LOW);
+  digitalWrite(motorBackRight, HIGH);
+  analogWrite(motorEnableLeft, rightMotorSpeed);
   analogWrite(motorEnableRight, rightMotorSpeed);
 }
 //-preset for the car to turn to the right
@@ -165,7 +180,7 @@ void setup() {
 void put_off_fire(){
   delay (500);
   int potValue = analogRead(A0); // Read potentiometer value 
-  int pwmOutput = map(potValue, 0, 1023, 0 , 255); // Map the potentiometer value from 0 to 255 
+  //int pwmOutput = map(potValue, 0, 1023, 0 , 255); // Map the potentiometer value from 0 to 255 
   int pwmOutput = 255; 
   analogWrite(enA, pwmOutput); // Send PWM signal to L298N Enable pin    
   delay(500); //a delay is added so the pump fires water in bursts    
@@ -223,6 +238,8 @@ if (sensorValueForward_1_S < 100) //If Fire is straight ahead
       Serial.print(Forward_1_S);
       //Move the robot forward
       goForwardFull();
+      delay(1000);
+      stopCar();
       put_off_fire();
       }
       else if (sensorValueLeft_S < 100) //If Fire is to the left
@@ -230,8 +247,10 @@ if (sensorValueForward_1_S < 100) //If Fire is straight ahead
       Serial.print("Left_S");
       Serial.print(Left_S); 
       //Move the robot left
-      goLeft();
-      delay(500); //a delay is added so the robot turns and then fire and not fire while turning
+      turnLeft();
+      delay(2000);//a delay is added so the robot turns and then fire and not fire while turning
+      stopCar();
+      delay(100);
       put_off_fire();
       }
       else if (sensorValueRight_S < 100) //If Fire is to the right
@@ -239,11 +258,10 @@ if (sensorValueForward_1_S < 100) //If Fire is straight ahead
       Serial.print("Right_S");
       Serial.print(Right_S);
       //Move the robot right
-      goRight();
-      delay(500); //a delay is added so the robot turns and then fire and not fire while turning
+      turnRight();
+      delay(2000); //a delay is added so the robot turns and then fire and not fire while turning
+      stopCar();
+      delay(100);
       put_off_fire();
       }
 }
-
-
-
